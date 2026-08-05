@@ -23,10 +23,14 @@ curl -fsSL https://raw.githubusercontent.com/Cisco-Talos/clamav/clamav-1.5.3/cer
 cp "${build}/config/clamav/freshclam.conf" "${cache}/freshclam.conf"
 sed -i '/^DatabaseDirectory /d;/^CVDCertsDirectory /d' "${cache}/freshclam.conf"
 
+printf '\n' >> "${cache}/freshclam.conf"
+
 cat >> "${cache}/freshclam.conf" <<EOF
 DatabaseDirectory ${cache}/clamav-data
 CVDCertsDirectory ${cache}/clamav-certs
 EOF
+
+export CVD_CERTS_DIR="${cache}/clamav-certs"
 
 # Refresh the virus database, the source is specified in the conf file
 freshclam --config-file="${cache}/freshclam.conf" --quiet
